@@ -2,7 +2,7 @@ import machine
 import time
 
 ldr = machine.ADC(machine.Pin(34))
-ldr.atten(machine.ADC.ATTN_11V) # Configuração para leitura total de 0-4095
+ldr.atten(machine.ADC.ATTN_11DB)
 btn = machine.Pin(32, machine.Pin.IN, machine.Pin.PULL_UP)
 
 print("Contador de Producao Inicializado")

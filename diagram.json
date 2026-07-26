@@ -14,6 +14,6 @@
     [ "esp:GND.1", "ldr1:GND", "black", [ "v0" ] ],
     [ "esp:34", "ldr1:AO", "green", [ "v0" ] ],
     [ "esp:32", "btn1:1.l", "blue", [ "v0" ] ],
-    [ "esp:GND", "btn1:2.l", "black", [ "v0" ] ]
+    [ "esp:GND.2", "btn1:2.l", "black", [ "v0" ] ]
   ]
 }
