@@ -21,7 +21,7 @@ while True:
 
     if valor_ldr < 1000:
         if not luz_bloqueada:
-            # A peça acabou de entrar
+
             luz_bloqueada = True
             tempo_inicio_bloqueio = tempo_atual
             alerta_emitido = False
