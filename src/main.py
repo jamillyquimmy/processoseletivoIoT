@@ -1,53 +1,44 @@
 import machine
 import time
 
-
-ldr_pin = machine.ADC(machine.Pin(34))
-ldr_pin.atten(machine.ADC.ATTN_11DB)
-
-btn_pin = machine.Pin(32, machine.Pin.IN, machine.Pin.PULL_UP)
-
-contador = 0
-peca_passando = False
-tempo_bloqueio = 0
-alerta_enviado = False
-ultimo_estado_btn = 1
-ultimo_tempo_debounce = 0
+ldr = machine.ADC(machine.Pin(34))
+ldr.atten(machine.ADC.ATTN_11V) # Configuração para leitura total de 0-4095
+btn = machine.Pin(32, machine.Pin.IN, machine.Pin.PULL_UP)
 
 print("Contador de Producao Inicializado")
 
+total_pecas = 0
+luz_bloqueada = False
+tempo_inicio_bloqueio = 0
+alerta_emitido = False
+ultimo_clique_btn = 0
+
 while True:
+    valor_ldr = ldr.read()
     tempo_atual = time.ticks_ms()
-
-    valor_ldr = ldr_pin.read()
     
-    if valor_ldr < 1000 and not peca_passando:
-        peca_passando = True
-        tempo_bloqueio = tempo_atual
-        alerta_enviado = False
+    if valor_ldr < 1000 and not luz_bloqueada:
+        luz_bloqueada = True
+        tempo_inicio_bloqueio = tempo_atual 
+        alerta_emitido = False              
 
-    elif valor_ldr > 2000 and peca_passando:
-        peca_passando = False
-        contador += 1
-        print(f"Peca detectada! Total: {contador}")
+    elif valor_ldr > 2000 and luz_bloqueada:
+        luz_bloqueada = False               
+        total_pecas += 1
+        print(f"Peca detectada! Total: {total_pecas}")
 
+    if luz_bloqueada and not alerta_emitido:
 
-    if peca_passando and not alerta_enviado:
-        if time.ticks_diff(tempo_atual, tempo_bloqueio) > 5000:
+        if time.ticks_diff(tempo_atual, tempo_inicio_bloqueio) >= 5000:
             print("Alerta: Micro-parada detectada!")
-            alerta_enviado = True
-
-
-    estado_btn = btn_pin.value()
-    
-    if estado_btn == 0 and ultimo_estado_btn == 1:
-        if time.ticks_diff(tempo_atual, ultimo_tempo_debounce) > 200:
-            contador = 0
-            peca_passando = False
-            alerta_enviado = False
-            ultimo_tempo_debounce = tempo_atual
-            print("Turno resetado com sucesso. Contadores zerados.")
+            alerta_emitido = True # Trava para não repetir o erro infinitamente
             
-    ultimo_estado_btn = estado_btn
+    if btn.value() == 0:
+        if time.ticks_diff(tempo_atual, ultimo_clique_btn) > 200: # Debounce de 200ms
+            total_pecas = 0
+            luz_bloqueada = False
+            alerta_emitido = False
+            print("Turno resetado com sucesso. Contadores zerados.")
+            ultimo_clique_btn = tempo_atual
 
-    time.sleep_ms(10)
+    time.sleep_ms(50)
