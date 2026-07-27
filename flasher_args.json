@@ -1,47 +1,11 @@
 {
-  "write_flash_args": [
-    "--flash_mode",
-    "dio",
-    "--flash_size",
-    "4MB",
-    "--flash_freq",
-    "40m"
-  ],
   "flash_settings": {
     "flash_mode": "dio",
     "flash_size": "4MB",
     "flash_freq": "40m"
   },
   "flash_files": {
-    "0x1000": "binaries/bootloader.bin",
-    "0x8000": "binaries/partition-table.bin",
-    "0x10000": "binaries/micropython.bin",
+    "0x1000": "binaries/micropython.bin",
     "0x200000": "fs.bin"
-  },
-  "bootloader": {
-    "offset": "0x1000",
-    "file": "binaries/bootloader.bin",
-    "encrypted": "false"
-  },
-  "app": {
-    "offset": "0x10000",
-    "file": "binaries/micropython.bin",
-    "encrypted": "false"
-  },
-  "partition-table": {
-    "offset": "0x8000",
-    "file": "binaries/partition-table.bin",
-    "encrypted": "false"
-  },
-  "fs": {
-    "offset": "0x200000",
-    "file": "fs.bin",
-    "encrypted": "false"
-  },
-  "extra_esptool_args": {
-    "after": "hard_reset",
-    "before": "default_reset",
-    "stub": true,
-    "chip": "esp32"
   }
 }

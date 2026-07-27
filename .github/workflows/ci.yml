@@ -7,7 +7,29 @@ on:
     branches: ["master", "main"]
 
 jobs:
+  build_filesystem:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -t esp32-builder -f Dockerfile .
+
+    - name: Run container and generate fs.bin
+      run: |
+        docker run --name esp32-fs-builder esp32-builder /bin/bash
+        docker cp esp32-fs-builder:/fs.bin .
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: esp32-firmware-binary
+        path: fs.bin
+        retention-days: 1
+
   run_tests:
+    needs: [build_filesystem]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,6 +38,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: esp32-firmware-binary
+        path: .
 
     - name: Test with Wokwi
       uses: wokwi/wokwi-ci-action@v1
