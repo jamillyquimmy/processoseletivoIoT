@@ -17,6 +17,6 @@
     [ "led:C", "r1:1", "black", [ "v0" ] ],
     [ "r1:2", "esp:GND.2", "black", [ "v0" ] ],
     [ "esp:D32", "btn1:1.l", "blue", [ "v0" ] ],
-    [ "esp:GND.3", "btn1:2.l", "black", [ "v0" ] ]
+    [ "esp:GND.1", "btn1:2.l", "black", [ "v0" ] ]
   ]
 }
