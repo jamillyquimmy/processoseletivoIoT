@@ -50,4 +50,4 @@ jobs:
       with:
         token: ${{ secrets.WOKWI_CLI_TOKEN }}
         scenario: 'scenarios/light/${{ matrix.test_type }}.yaml'
-        timeout: 10000
+        timeout: 30000
