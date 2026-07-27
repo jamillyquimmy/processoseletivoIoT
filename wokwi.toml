@@ -1,4 +1,4 @@
 [wokwi]
 version = 1
 elf = "fs.bin"
-firmware = "micropython"
+firmware = "binaries/micropython.bin"
