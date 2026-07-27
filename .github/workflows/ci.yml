@@ -1,54 +1,15 @@
-name: ESP32 Filesystem Build
+name: Wokwi CI Tests
 
 on:
   push:
-    branches: ["*master*"]
+    branches: ["master", "main"]
   pull_request:
-    branches: ["*master*"]
+    branches: ["master", "main"]
 
 jobs:
-  detect_project:
-    runs-on: ubuntu-latest
-    outputs:
-      project_folder: ${{ steps.set_folder.outputs.project_folder }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Identify active project
-        id: set_folder
-        run: |
-
-
-  build_filesystem:
-    needs: detect_project
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Build Docker image
-      run: docker build -t esp32-builder -f Dockerfile .
-
-    - name: Run container and generate fs.bin
-      run: |
-        docker run --name esp32-fs-builder esp32-builder /bin/bash
-        
-        docker cp esp32-fs-builder:/fs.bin .
-
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: esp32-firmware-binary
-        path: fs.bin
-        retention-days: 1
-
   run_tests:
-    needs: [detect_project, build_filesystem]
     runs-on: ubuntu-latest
     strategy:
-      # Define os 3 tipos de sub-testes que existem para todos os cenários
       matrix:
         test_type: [test_1, test_2, test_3]
 
@@ -56,14 +17,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Download Build Artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: esp32-firmware-binary
-        path: .
-
     - name: Test with Wokwi
       uses: wokwi/wokwi-ci-action@v1
       with:
         token: ${{ secrets.WOKWI_CLI_TOKEN }}
         scenario: 'scenarios/light/${{ matrix.test_type }}.yaml'
+        timeout: 10000
