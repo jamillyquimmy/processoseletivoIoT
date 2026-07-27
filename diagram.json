@@ -14,6 +14,6 @@
     [ "esp:D34", "ldr:AO", "green", [ "v0" ] ],
     [ "esp:D2", "led:A", "red", [ "v0" ] ],
     [ "led:C", "r1:1", "black", [ "v0" ] ],
-    [ "r1:2", "esp:GND", "black", [ "v0" ] ]
+    [ "r1:2", "esp:GND.2", "black", [ "v0" ] ]
   ]
 }
