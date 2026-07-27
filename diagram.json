@@ -10,9 +10,9 @@
   ],
   "connections": [
     [ "esp:3V3", "ldr:VCC", "red", [ "v0" ] ],
-    [ "esp:GND", "ldr:GND", "black", [ "v0" ] ],
-    [ "esp:34", "ldr:AO", "green", [ "v0" ] ],
-    [ "esp:2", "led:A", "red", [ "v0" ] ],
+    [ "esp:GND.1", "ldr:GND", "black", [ "v0" ] ],
+    [ "esp:D34", "ldr:AO", "green", [ "v0" ] ],
+    [ "esp:D2", "led:A", "red", [ "v0" ] ],
     [ "led:C", "r1:1", "black", [ "v0" ] ],
     [ "r1:2", "esp:GND", "black", [ "v0" ] ]
   ]
